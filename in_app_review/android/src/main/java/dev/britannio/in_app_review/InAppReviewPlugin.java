@@ -175,7 +175,11 @@ public class InAppReviewPlugin implements FlutterPlugin, MethodCallHandler, Acti
         if (noContextOrActivity(result)) return;
 
         Task<Void> flow = manager.launchReviewFlow(activity, reviewInfo);
-        flow.addOnCompleteListener(task -> result.success(null));
+        flow.addOnCompleteListener(task -> { 
+            Log.i(TAG, "launchReviewFlow task status: " + task.isSuccessful());
+            result.success(null);
+        });
+        Log.i(TAG, "launchReviewFlow: requested");
     }
 
     private boolean isPlayStoreInstalled() {
@@ -200,6 +204,7 @@ public class InAppReviewPlugin implements FlutterPlugin, MethodCallHandler, Acti
         );
 
         activity.startActivity(intent);
+        Log.i(TAG, "activity started with URI: https://play.google.com/store/apps/details?id=" + packageName);
 
         result.success(null);
     }
